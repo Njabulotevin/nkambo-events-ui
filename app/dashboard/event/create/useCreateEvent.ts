@@ -22,7 +22,7 @@ function useCreateEvent() {
             const res = await apiClient.post("/event/create", values);
 
             if(Status.isOk(res.status)){
-                route.push("/dashbaord/")
+                route.push("/dashboard/")
             }
         }
     })
