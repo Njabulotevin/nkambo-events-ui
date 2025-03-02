@@ -11,3 +11,6 @@ const {data, error, isLoading} = useSWR<Event[]>("/event", apiFetcherClient);
 }
 
 export default useEventList
+
+
+  

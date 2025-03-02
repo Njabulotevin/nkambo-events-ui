@@ -30,7 +30,7 @@ export default function EventTable() {
             <p className="text-sm text-muted-foreground text-center">Manage your events</p>
           </div>
           <div className="overflow-x-auto">
-            <Table>
+           {data?.length == 0? <div>You don&apos;t have any events!</div>: <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[250px]">Event Name</TableHead>
@@ -43,18 +43,19 @@ export default function EventTable() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.map((event : Event) => (
+                {data?.map((event : Event) => (
                   <TableRow key={event._id}>
                     <TableCell className="font-medium">{event.name}</TableCell>
-                    <TableCell>{event.location}</TableCell>
-                    <TableCell>{event.start_date}</TableCell>
+                    <TableCell className="w-[280px]">{event.location}</TableCell>
+                    <TableCell className="w-[100px]">{event.start_date}</TableCell>
                     <TableCell>{event.start_time}</TableCell>
-                    <TableCell>${event.ticket_price}</TableCell>
+                    <TableCell>R{event.ticket_price}</TableCell>
                     <TableCell>{event.ticket_quantity}</TableCell>
                     <TableCell className="text-right">
                       <Button
                         variant="outline"
                         className="mr-2 border-[#E31B54] text-[#E31B54] hover:bg-[#E31B54] hover:text-white"
+                        onClick={()=>route.push("/dashboard/event/"+event._id)}
                       >
                         View
                       </Button>
@@ -63,7 +64,7 @@ export default function EventTable() {
                   </TableRow>
                 ))}
               </TableBody>
-            </Table>
+            </Table>}
           </div>
           <div className="flex justify-end">
             <Button onClick={()=>route.push("/dashboard/event/create")} className="bg-[#E31B54] hover:bg-[#E31B54]/90">Add New Event</Button>

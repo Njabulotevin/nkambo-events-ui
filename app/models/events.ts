@@ -9,4 +9,5 @@ export interface Event {
     end_time: string;
     ticket_price: number;
     ticket_quantity: number;
+    cover_url: string;
 }

@@ -1,12 +1,13 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { CalendarIcon, ClockIcon, ImageIcon, MapPinIcon, TicketIcon, UsersIcon } from "lucide-react"
-import { useEventById } from "./useGetEventById"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
+import type React from "react"
+
 import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { CalendarIcon, ClockIcon, MapPinIcon, TicketIcon, UsersIcon, ImageIcon } from "lucide-react"
 
 // Mock data for a single event
 const event = {
@@ -24,16 +25,8 @@ const event = {
   cover_image: "/placeholder.svg?height=400&width=800",
 }
 
-export default function EventDetails({
-  params,
-}: {
-  params: { id: string }
-}) {
-
-  
-  const {data, error, isLoading} = useEventById(params.id)
-  
-  const [coverImage, setCoverImage] = useState("")
+export default function EventDetailsWithModal() {
+  const [coverImage, setCoverImage] = useState(event.cover_image)
 
   const handleImageUpload = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -54,14 +47,14 @@ export default function EventDetails({
         <div className="relative h-64 sm:h-80 md:h-96">
           <img
             src={coverImage || "/placeholder.svg"}
-            alt={data?.name}
+            alt={event.name}
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-end">
             <div className="p-6 flex justify-between items-end w-full">
               <div>
-                <h1 className="text-3xl font-bold text-white mb-2">{data?.name}</h1>
-                <p className="text-white text-opacity-80">{data?.start_date}</p>
+                <h1 className="text-3xl font-bold text-white mb-2">{event.name}</h1>
+                <p className="text-white text-opacity-80">{event.start_date}</p>
               </div>
               <Dialog>
                 <DialogTrigger asChild>
@@ -91,32 +84,32 @@ export default function EventDetails({
         <div className="p-6 space-y-6">
           <div className="space-y-2">
             <h2 className="text-2xl font-semibold">About this event</h2>
-            <p className="text-gray-600">{data?.description}</p>
+            <p className="text-gray-600">{event.description}</p>
           </div>
           <div className="space-y-4">
             <div className="flex items-center space-x-2 text-gray-600">
               <CalendarIcon className="w-5 h-5 text-[#E31B54]" />
               <span>
-                {data?.start_date} - {data?.end_date}
+                {event.start_date} - {event.end_date}
               </span>
             </div>
             <div className="flex items-center space-x-2 text-gray-600">
               <ClockIcon className="w-5 h-5 text-[#E31B54]" />
               <span>
-                {data?.start_time} - {data?.end_time}
+                {event.start_time} - {event.end_time}
               </span>
             </div>
             <div className="flex items-center space-x-2 text-gray-600">
               <MapPinIcon className="w-5 h-5 text-[#E31B54]" />
-              <span>{data?.location}</span>
+              <span>{event.location}</span>
             </div>
             <div className="flex items-center space-x-2 text-gray-600">
               <TicketIcon className="w-5 h-5 text-[#E31B54]" />
-              <span>${data?.ticket_price}</span>
+              <span>${event.ticket_price}</span>
             </div>
             <div className="flex items-center space-x-2 text-gray-600">
               <UsersIcon className="w-5 h-5 text-[#E31B54]" />
-              <span>{data?.ticket_quantity} tickets available</span>
+              <span>{event.ticket_quantity} tickets available</span>
             </div>
           </div>
           <div className="pt-6">

@@ -11,4 +11,4 @@ export const apiClient : AxiosInstance = axios.create({
 });
 
 
-export const apiFetcherClient = (url : string) => apiClient.get(url).then((res)=>res.data)
+export const apiFetcherClient = (url : string) => fetch('http://localhost:8080'+url).then((res)=>res.json()).then((data)=>data.data)
