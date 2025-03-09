@@ -1,8 +1,8 @@
 "use client"
 
 import useSWR from "swr";
-import { apiFetcherClient } from "../services/api"
-import {Event} from "@/app/models/events"
+import { apiFetcherClient } from "@/services/api";
+import {Event} from "@/models/events"
 
 
 function useEventList() {

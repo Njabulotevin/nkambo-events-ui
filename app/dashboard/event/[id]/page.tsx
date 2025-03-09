@@ -1,71 +1,91 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { CalendarIcon, ClockIcon, ImageIcon, MapPinIcon, TicketIcon, UsersIcon } from "lucide-react"
-import { useEventById } from "./useGetEventById"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { useState } from "react"
+import { Button } from "@/components/ui/button";
+import {
+  CalendarIcon,
+  ClockIcon,
+  ImageIcon,
+  MapPinIcon,
+  TicketIcon,
+  UsersIcon,
+} from "lucide-react";
+import { useEventById } from "./useGetEventById";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { apiClient } from "@/services/api";
+import { Status } from "@/services/utils";
 
-// Mock data for a single event
-const event = {
-  id: 1,
-  name: "Summer Music Festival 2024",
-  description:
-    "Join us for an unforgettable day of music featuring top artists from around the world. Experience a diverse range of genres, from rock and pop to electronic and indie, all in the beautiful setting of Central Park.",
-  location: "Central Park, New York City",
-  start_date: "2024-07-15",
-  end_date: "2024-07-15",
-  start_time: "14:00",
-  end_time: "23:00",
-  ticket_price: 50,
-  ticket_quantity: 1000,
-  cover_image: "/placeholder.svg?height=400&width=800",
-}
+export default function EventDetails() {
+  const router = useRouter();
 
-export default function EventDetails({
-  params,
-}: {
-  params: { id: string }
-}) {
+  const params = useParams<{id:string}>()
 
-  
-  const {data, error, isLoading} = useEventById(params.id)
-  
-  const [coverImage, setCoverImage] = useState("")
+  const { data} = useEventById(params.id);
 
-  const handleImageUpload = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const file = formData.get("cover_image") as File
+  const [coverImage, setCoverImage] = useState(data?.cover_url);
+
+  const [isPending, setIsPending] = useState(false)
+
+  const handleImageUpload = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const file = formData.get("cover_image") as File;
+
+    setIsPending(true)
+    const res = await apiClient.post("/event/cover/upload/" + params.id, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    
+    if(Status.isOk(res.status)){
+
+    }
+
+    setIsPending(false)
+    window.location.reload()
 
     if (file) {
-      // In a real application, you would upload the file to your server or a cloud storage service here.
-      // For this example, we'll just create a local URL for the selected file.
-      const imageUrl = URL.createObjectURL(file)
-      setCoverImage(imageUrl)
+      console.log(coverImage)
+
+      const imageUrl = URL.createObjectURL(file);
+      setCoverImage(imageUrl);
     }
-  }
+  };
 
   return (
-    <div className="min-h-screen bg-[#0A0B2E] flex items-center justify-center p-4">
+    <div className="min-h-screen p-4">
       <div className="w-full max-w-4xl space-y-8 bg-white rounded-lg shadow-xl overflow-hidden">
         <div className="relative h-64 sm:h-80 md:h-96">
           <img
-            src={coverImage || "/placeholder.svg"}
+            src={data?.cover_url || "/placeholder.svg"}
             alt={data?.name}
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-end">
             <div className="p-6 flex justify-between items-end w-full">
               <div>
-                <h1 className="text-3xl font-bold text-white mb-2">{data?.name}</h1>
+                <h1 className="text-3xl font-bold text-white mb-2">
+                  {data?.name}
+                </h1>
                 <p className="text-white text-opacity-80">{data?.start_date}</p>
               </div>
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="outline" className="bg-white text-[#E31B54] hover:bg-[#E31B54] hover:text-white">
+                  <Button
+                    variant="outline"
+                    className="bg-white text-[#E31B54] hover:bg-[#E31B54] hover:text-white"
+                  >
                     <ImageIcon className="w-4 h-4 mr-2" />
                     Change Cover
                   </Button>
@@ -77,10 +97,18 @@ export default function EventDetails({
                   <form onSubmit={handleImageUpload} className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="cover_image">Upload Image</Label>
-                      <Input id="cover_image" name="cover_image" type="file" accept="image/*" />
+                      <Input
+                        id="cover_image"
+                        name="cover_image"
+                        type="file"
+                        accept="image/*"
+                      />
                     </div>
-                    <Button type="submit" className="w-full bg-[#E31B54] hover:bg-[#E31B54]/90 text-white">
-                      Upload
+                    <Button
+                      type="submit"
+                      className="w-full bg-[#E31B54] hover:bg-[#E31B54]/90 text-white"
+                    >
+                      {isPending?"Loading...":"Upload"}
                     </Button>
                   </form>
                 </DialogContent>
@@ -120,13 +148,15 @@ export default function EventDetails({
             </div>
           </div>
           <div className="pt-6">
-            <Button className="w-full bg-[#E31B54] hover:bg-[#E31B54]/90 text-white py-2 px-4 rounded">
-              Buy Tickets
+            <Button
+              onClick={() => router.push("/dashboard/tickets/" + data?._id)}
+              className="w-full bg-[#E31B54] hover:bg-[#E31B54]/90 text-white py-2 px-4 rounded"
+            >
+              View Tickets
             </Button>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
-

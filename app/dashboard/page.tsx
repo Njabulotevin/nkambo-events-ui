@@ -1,77 +1,56 @@
-"use client"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { BarChart, Calendar, DollarSign, Users } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useRouter } from "next/navigation"
-import useEventList from "./useEventList";
-import { Event } from "../models/events";
+export default function AdminDashboardPage() {
+  return (
+    <div className="space-y-8">
+      <h1 className="text-3xl font-bold text-white">Dashboard</h1>
 
-
-
-export default function EventTable() {
-
-    const route = useRouter();
-
-    const {data, error, isLoading} = useEventList();
-
-  if(error){
-    return <div>Error</div>
-  }
-
-  if(isLoading){
-    return <div>Loading...</div>
-  }
-
-   return (
-      <div className="min-h-screen bg-[#0A0B2E] flex items-center justify-center p-4">
-        <div className="w-full max-w-4xl space-y-8 p-6 bg-white rounded-lg shadow-xl">
-          <div className="space-y-2">
-            <h1 className="text-2xl font-bold tracking-tight text-center">Event List</h1>
-            <p className="text-sm text-muted-foreground text-center">Manage your events</p>
-          </div>
-          <div className="overflow-x-auto">
-           {data?.length == 0? <div>You don&apos;t have any events!</div>: <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[250px]">Event Name</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Time</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Tickets</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data?.map((event : Event) => (
-                  <TableRow key={event._id}>
-                    <TableCell className="font-medium">{event.name}</TableCell>
-                    <TableCell className="w-[280px]">{event.location}</TableCell>
-                    <TableCell className="w-[100px]">{event.start_date}</TableCell>
-                    <TableCell>{event.start_time}</TableCell>
-                    <TableCell>R{event.ticket_price}</TableCell>
-                    <TableCell>{event.ticket_quantity}</TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        variant="outline"
-                        className="mr-2 border-[#E31B54] text-[#E31B54] hover:bg-[#E31B54] hover:text-white"
-                        onClick={()=>route.push("/dashboard/event/"+event._id)}
-                      >
-                        View
-                      </Button>
-                     
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>}
-          </div>
-          <div className="flex justify-end">
-            <Button onClick={()=>route.push("/dashboard/event/create")} className="bg-[#E31B54] hover:bg-[#E31B54]/90">Add New Event</Button>
-          </div>
-        </div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">R45,231.89</div>
+            <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Ticket Sales</CardTitle>
+            <BarChart className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">+2350</div>
+            <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Events</CardTitle>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">+12</div>
+            <p className="text-xs text-muted-foreground">+3 from last month</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">New Attendees</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">+573</div>
+            <p className="text-xs text-muted-foreground">+201 since last week</p>
+          </CardContent>
+        </Card>
       </div>
-    )
-  
+
+     
+    </div>
+  )
 }
 

@@ -42,6 +42,7 @@ export default function LoginPage() {
           <Button type="submit" className="w-full bg-[#E31B54] hover:bg-[#E31B54]/90" disabled={isPending}>{isPending?"Loading":"Sign in"}</Button>
         </form>
         <div className="mt-4 text-center text-sm">
+          {/* {error&&<p>{error}</p>} */}
           <span className="text-muted-foreground">Don&apos;t have an account? </span>
           <Link href="/signup" className="text-[#E31B54] hover:text-[#E31B54]/90">
             Sign up

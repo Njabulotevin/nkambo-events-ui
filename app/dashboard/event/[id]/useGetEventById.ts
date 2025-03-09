@@ -1,8 +1,8 @@
 "use client"
 
-import { apiFetcherClient } from "@/app/services/api";
+import { apiFetcherClient } from "@/services/api";
 import useSWR from "swr";
-import { Event } from "@/app/models/events";
+import { Event } from "@/models/events";
 
 
 export function useEventById(id : string) {

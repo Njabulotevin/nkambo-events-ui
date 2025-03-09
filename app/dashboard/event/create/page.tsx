@@ -10,8 +10,8 @@ export default function EventForm() {
   const {values, handleSubmit, handleChange} = useCreateEvent();
 
   return (
-    <div className="min-h-screen bg-[#0A0B2E] flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl space-y-8 p-6 bg-white rounded-lg shadow-xl">
+    <div className="min-h-screen  flex  p-4">
+      <div className="w-full max-w-2xl space-y-8 p-6 bg-white border border-gray-200">
         <div className="space-y-2 text-center">
           <h1 className="text-2xl font-bold tracking-tight">Create Event</h1>
           <p className="text-sm text-muted-foreground">Fill in the details for your new event</p>

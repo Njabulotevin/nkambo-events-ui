@@ -1,14 +1,17 @@
 'use client'
 
 import { useFormik } from "formik";
-import { apiClient } from "../services/api";
-import { Status } from "../services/utils";
+import { apiClient } from "../../services/api";
+import { Status } from "../../services/utils";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import {setCookie} from "cookies-next/client"
 
 function useLogin() {
   const route = useRouter()
   const [isPending, setIsPending] = useState(false);
+
+  const [error, setError] = useState("")
 
   const { values, handleSubmit, handleChange } = useFormik({
     initialValues: {
@@ -17,19 +20,28 @@ function useLogin() {
     },
 
     onSubmit: async (values) => {
-      setIsPending(true)
+      try{
+        setIsPending(true)
       const res = await apiClient.post("/admin/login", values);
 
       if(Status.isOk(res.status)){
         setIsPending(false)
-        console.log("Was succesful!")
-        route.push("/dashboard")
         
+        setCookie("admin", res.data.data?.token)
+
+        route.push("/")
+      }
+      }catch(e){
+        console.log(e)
+        setIsPending(false)
+        setError("Invalid email or password")
+        setIsPending(false)
       }
       setIsPending(false)
+      
     },
   });
-  return { values, handleSubmit, handleChange, isPending };
+  return { values, handleSubmit, handleChange, isPending, error, setError };
 }
 
 export default useLogin;
