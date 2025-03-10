@@ -8,7 +8,7 @@ import useLogin from "./useLogin"
 
 export default function LoginPage() {
 
-  const {values, handleSubmit, handleChange, isPending} = useLogin()
+  const {values, handleSubmit, handleChange, isPending, error} = useLogin()
 
   return (
     <div className="min-h-screen bg-[#0A0B2E] flex items-center justify-center p-4">
@@ -42,7 +42,11 @@ export default function LoginPage() {
           <Button type="submit" className="w-full bg-[#E31B54] hover:bg-[#E31B54]/90" disabled={isPending}>{isPending?"Loading":"Sign in"}</Button>
         </form>
         <div className="mt-4 text-center text-sm">
-          {/* {error&&<p>{error}</p>} */}
+        {error && (
+          <div className={`p-2 rounded-md border  ${error.includes("failed") ?  "border-500" : "border-500"}`}>
+            <p className={`text-center ${error.includes("failed") ? "text-red-500" : "text-green-500"}`}>{error}</p>
+          </div>
+        )}
           <span className="text-muted-foreground">Don&apos;t have an account? </span>
           <Link href="/signup" className="text-[#E31B54] hover:text-[#E31B54]/90">
             Sign up
