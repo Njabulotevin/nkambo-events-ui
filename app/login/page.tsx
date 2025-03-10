@@ -43,8 +43,8 @@ export default function LoginPage() {
         </form>
         <div className="mt-4 text-center text-sm">
         {error && (
-          <div className={`p-2 rounded-md border  border-red-500`}>
-            <p className={`text-center "text-red-500"`}>{error}</p>
+          <div className={`p-2 rounded-md border  border-red-500 my-2`}>
+            <p className={`text-center text-red-500`}>{error}</p>
           </div>
         )}
           <span className="text-muted-foreground">Don&apos;t have an account? </span>

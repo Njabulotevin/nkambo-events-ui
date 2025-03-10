@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 import { BuyTicket } from "../models/services";
 
-const server_url = process.env.SERVER_URL || "http://api.nkamboevents.co.za";
+const server_url = process.env.SERVER_URL || "https://api.nkamboevents.co.za";
 
 export const apiClient: AxiosInstance = axios.create({
   baseURL: server_url,
